@@ -20,8 +20,6 @@ def cadastrar(usuarios):
     print("\nUsuario cadastrado com sucesso!")
 
 # função para visualizar
-
-
 def visualizar(usuarios):
     for i, usuario in enumerate(usuarios):
         print(f"\nUsuario de numero {i}")
@@ -30,8 +28,6 @@ def visualizar(usuarios):
         print(f"Email: {usuario['email']}\n")
 
 # função para remover
-
-
 def remover(usuarios, indice):
     if 0 <= indice < len(usuarios):
         usuario_removido = usuarios.pop(indice)
