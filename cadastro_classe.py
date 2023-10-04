@@ -1,55 +1,87 @@
-class Cadastro:
-    def __init__(self):
-        self.itens = []
+import json
 
-    def adicionar_item(self, item):
-        self.itens.append(item)
-        print(f"{item} foi adicionado ao cadastro.")
+# função para cadastro
+def cadastrar_usuario(usuarios):
+    nome = input("Digite seu nome: ")
+    idade = input("Digite sua idade: ")
+    email = input("Digite seu email: ")
 
-    def listar_itens(self):
-        if not self.itens:
-            print("O cadastro está vazio.")
-        else:
-            print("Itens cadastrados:")
-            for item in self.itens:
-                print(item)
+    usuario = {
+        "nome": nome,
+        "idade": idade,
+        "email": email
+    }
 
-    def salvar_em_arquivo(self, nome_arquivo):
-        with open(nome_arquivo, 'w') as arquivo:
-            for item in self.itens:
-                arquivo.write(item + '\n')
+    usuarios.append(usuario)
+    print("Usuário cadastrado com sucesso!\n")
 
-    def carregar_de_arquivo(self, nome_arquivo):
-        try:
-            with open(nome_arquivo, 'r') as arquivo:
-                self.itens = [linha.strip() for linha in arquivo.readlines()]
-        except FileNotFoundError:
-            pass
+# função para visualizar
+def listar_usuarios(usuarios):
+    for i, usuario in enumerate(usuarios):
+        print(f"Usuário {i + 1}")
+        print(f"Nome: {usuario['nome']}")
+        print(f"Idade: {usuario['idade']}")
+        print(f"Email: {usuario['email']}\n")
 
-def main():
-    cadastro = Cadastro()
-    nome_arquivo = "cadastro.txt"
-    cadastro.carregar_de_arquivo(nome_arquivo)
+# função para remover
+def remover_usuario(usuarios, indice):
+    if 0 <= indice < len(usuarios):
+        usuario_removido = usuarios.pop(indice)
+        print(f"O usuário {usuario_removido['nome']} foi removido!")
+    else:
+        print("Índice inválido")
 
-    while True:
-        print("\nMenu:")
-        print("1. Adicionar Item")
-        print("2. Listar Itens")
-        print("3. Salvar e Sair")
+# Função para atualizar
+def atualizar_usuario(usuarios, indice):
+    if 0 <= indice < len(usuarios):
+        usuario = usuarios[indice]
+        print(f"Atualizando o usuário - {usuario['nome']}")
+        nome = input("Digite o nome: ")
+        idade = input("Digite a idade: ")
+        email = input("Digite o email: ")
 
-        escolha = input("Escolha uma opção: ")
+        usuario['nome'] = nome
+        usuario['idade'] = idade
+        usuario['email'] = email
 
-        if escolha == "1":
-            item = input("Digite o item a ser cadastrado: ")
-            cadastro.adicionar_item(item)
-        elif escolha == "2":
-            cadastro.listar_itens()
-        elif escolha == "3":
-            cadastro.salvar_em_arquivo(nome_arquivo)
-            print("Dados salvos. Saindo do programa.")
-            break
-        else:
-            print("Opção inválida. Tente novamente.")
+        print(f"Usuário {usuario['nome']} atualizado com sucesso!")
+    else:
+        print("Índice inválido")
 
-if __name__ == "__main__":
-    main()
+# Função para salvar
+def salvar_usuarios(usuarios):
+    with open('usuarios.json', 'w') as arquivo:
+        json.dump(usuarios, arquivo)
+
+# Lista de usuários
+usuarios = []
+
+# interface
+while True:
+    print("Opções")
+    print("1 - Cadastrar usuário")
+    print("2 - Remover usuário")
+    print("3 - Listar usuários")
+    print("4 - Atualizar")
+    print("5 - Salvar")
+    print("6 - Sair\n")
+
+    opcao = input("Escolha uma opção: ")
+
+    if opcao == '1':
+        cadastrar_usuario(usuarios)
+    elif opcao == '2':
+        indice = int(input("\nDigite o número do usuário que quer excluir: ")) - 1
+        remover_usuario(usuarios, indice)
+    elif opcao == '3':
+        listar_usuarios(usuarios)
+    elif opcao == '4':
+        indice = int(input("Digite o número do usuário: "))
+        atualizar_usuario(usuarios, indice - 1)
+    elif opcao == '5':
+        salvar_usuarios(usuarios)
+    elif opcao == '6':
+        print("Saindo do programa...")
+        break
+    else:
+        print("Opção inválida")
